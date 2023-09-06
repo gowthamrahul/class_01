@@ -1,0 +1,31 @@
+# create and load the data from bq in public 
+
+create table partition_dataset.partition_table_02 as select * from bigquery-public-data.covid19_ecdc_eu.covid_19_geographic_distribution_worldwide; 
+
+
+
+#create a partition_table and load the data from above Table 
+
+
+create table if not exists partition_dataset_001.partition_table_02 
+(date DATE,
+day INTEGER,
+month INTEGER,
+year INTEGER,
+daily_confirmed_cases INTEGER,
+daily_deaths INTEGER,
+confirmed_cases INTEGER,
+deaths INTEGER,
+countries_and_territories STRING,
+geo_id STRING,
+country_territory_code STRING,
+pop_date_2019 INTEGER)
+PARTITION BY 
+date_trunc(date,month);
+
+#take high amount of gb
+select* from partition_dataset_001.partition_table_02 where date = 2020-01-26
+
+
+#after partion 
+select * from partition_dataset_001.partition_table_03 where date = 2020-01-26
